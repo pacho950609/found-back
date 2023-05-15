@@ -1,0 +1,44 @@
+service: potter-back
+
+custom: ${file(resources/config/custom.yml):custom}
+plugins:
+  - serverless-offline-lambda
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage,'local'}
+  region: us-east-1
+  iamRoleStatements: ${file(resources/config/iamRole.yml):iamRoleStatements}
+  environment: ${file(resources/config/env.yml):environment}
+
+functions:
+  signup:
+    handler: lib/handlers/auth/auth-handler.signUpHandler
+    events:
+      - http:
+          method: post
+          path: signup
+          cors: true
+  login:
+    handler: lib/handlers/auth/auth-handler.loginHandler
+    events:
+      - http:
+          method: post
+          path: login
+          cors: true
+  processMessage:
+    handler: lib/handlers/auth/auth-handler.messageHandler
+    events:
+      - sqs: 'arn:aws:sqs:us-east-1:267965871015:potter-queue'
+  processEvent:
+    handler: lib/handlers/auth/auth-handler.eventHandler
+    events:
+      - sns: 'arn:aws:sns:us-east-1:267965871015:potter-topic'
+
+package:
+  excludeDevDependencies: true
+
+
+

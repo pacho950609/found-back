@@ -1,0 +1,21 @@
+node_modules/
+pgdata/
+lib/
+coverage/
+.webpack/
+.DS_Store
+.env
+docs/
+
+# Serverless
+.serverless/
+awscli-bundle.zip
+awscli-bundle/
+
+# IDEs
+.vscode/*
+!.vscode/launch.json
+.idea/
+
+#docs
+public/
